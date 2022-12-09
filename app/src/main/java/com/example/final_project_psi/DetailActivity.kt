@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 
 class DetailActivity : AppCompatActivity() {
 
@@ -38,4 +39,9 @@ class DetailActivity : AppCompatActivity() {
 
 
     }
+    private fun setCurrentFragment(fragment: Fragment) =
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragment, fragment)
+            commit()
+        }
 }
