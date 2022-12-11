@@ -30,10 +30,11 @@ class FormReview : AppCompatActivity() {
         val resep = findViewById<TextView>(R.id.etNamaResep).text.toString()
 
         val btnTambahReview = findViewById<Button>(R.id.btnTambahReview)
+        val btnBack = findViewById<Button>(R.id.btnBackInput)
         val fragment = SecondFragment()
 
         btnTambahReview.setOnClickListener {
-            val bundle = Bundle()
+//            val bundle = Bundle()
 //            bundle.putString(SecondFragment.CREATOR,creator)
 //            bundle.putString(SecondFragment.REVIEW,review)
 //            bundle.putString(SecondFragment.CAT,cat)
@@ -46,6 +47,10 @@ class FormReview : AppCompatActivity() {
             intent.putExtra(MainActivity.RESEP,review)
             intent.putExtra(MainActivity.RATING,rate)
             startActivity(intent)
+        }
+
+        btnBack.setOnClickListener {
+            this.finish()
         }
 
 
