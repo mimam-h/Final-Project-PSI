@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.internal.ContextUtils.getActivity
 
 
-class ListRecipeAdapter(var recipeList: ArrayList<Recipe>): RecyclerView.Adapter<ListRecipeAdapter.ListViewHolder>(){
-    inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+class ListRecipeAdapter(var recipeList: ArrayList<Recipe>): RecyclerView.Adapter<ListRecipeAdapter.RecipeViewHolder>(){
+    inner class RecipeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val context = itemView.context
     }
 
@@ -24,22 +24,26 @@ class ListRecipeAdapter(var recipeList: ArrayList<Recipe>): RecyclerView.Adapter
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_item,parent,false)
-        return ListViewHolder(view)
+        return RecipeViewHolder(view)
     }
 
     @SuppressLint("RestrictedApi")
-    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecipeViewHolder, position: Int) {
         holder.itemView.apply{
             var photo = findViewById<ImageView>(R.id.recipe_image)
             var namaResep = findViewById<TextView>(R.id.recipe_name)
             var kategoriResep = findViewById<TextView>(R.id.recipe_cat)
             var pembuatResep = findViewById<TextView>(R.id.recipe_creator)
             var button = findViewById<Button>(R.id.button)
+
+            /* Event Handler for photo click */
             photo.setOnClickListener {
                 Toast.makeText(context,recipeList[position].name, Toast.LENGTH_SHORT).show()
             }
+
+            /* Event Handler to Detail Activity */
             button.setOnClickListener {
                 val intent = Intent(context, DetailActivity::class.java)
                 intent.putExtra(DetailActivity.NAME,namaResep.text.toString())

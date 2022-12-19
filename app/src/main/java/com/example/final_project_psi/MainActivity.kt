@@ -45,13 +45,13 @@ class MainActivity : AppCompatActivity() {
         var navigation_menu = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         navigation_menu.setOnItemSelectedListener {
             /* Belum Berhasil */
-//            val bundle = Bundle()
-//            bundle.putString(SecondFragment.CREATOR,creator)
-//            bundle.putString(SecondFragment.REVIEW,review)
-//            bundle.putString(SecondFragment.CAT,cat)
-//            bundle.putDouble(SecondFragment.RATING,rate)
-//            bundle.putString(SecondFragment.RESEP,resep)
-//            secondFragment.arguments = bundle
+            val bundle = Bundle()
+            bundle.putString(SecondFragment.CREATOR,creator)
+            bundle.putString(SecondFragment.REVIEW,review)
+            bundle.putString(SecondFragment.CAT,cat)
+            bundle.putDouble(SecondFragment.RATING,rate)
+            bundle.putString(SecondFragment.RESEP,resep)
+            secondFragment.arguments = bundle
             when(it.itemId){
                 R.id.miHome -> setCurrentFragment(firstFragment)
                 R.id.miArticle -> setCurrentFragment(secondFragment)

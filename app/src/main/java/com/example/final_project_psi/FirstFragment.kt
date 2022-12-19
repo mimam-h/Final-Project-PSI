@@ -2,6 +2,7 @@ package com.example.final_project_psi
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.hdodenhof.circleimageview.CircleImageView
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +33,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FirstFragment : Fragment() {
+    private val LOGS = 5
+    lateinit var subscription : CompositeDisposable
     lateinit var rvListRecipe: RecyclerView
     lateinit var search: SearchView
     lateinit var button: Button
@@ -48,16 +57,50 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         search = view.findViewById(R.id.searchView)
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+//        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                filterList(newText)
+//                return false
+//            }
+//        })
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                filterList(newText)
-                return false
-            }
+        subscription = CompositeDisposable()
+        val observable_search = Observable.create(ObservableOnSubscribe<String> { subscriber ->
+            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    subscriber.onNext(query!!)
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    subscriber.onNext(newText!!)
+                    return false
+                }
+
+            })
+
         })
+            .debounce(1000, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe ({ text ->
+                Log.d("search", "subscriber: $text")
+                filterList(text)
+            },
+                {
+                    Log.e("search","Erorr : $it")
+                },
+                {
+                    Log.d("search","Complete")
+                }
+            )
+
+        subscription.add(observable_search)
 
         add(recipeList)
         rvListRecipe = view.findViewById<RecyclerView>(R.id.rvListRecipe)

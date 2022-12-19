@@ -31,6 +31,15 @@ class SecondFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+//        val data = arguments
+//        if(data!=null){
+//            val creator = data!!.getString(CREATOR)
+//            val cat = data!!.getString(CAT)
+//            val review = data!!.getString(REVIEW)
+//            val rate = data!!.getDouble(RATING)
+//            val resep = data!!.getString(RESEP)
+//            list.add(Review(cat!!,resep!!,creator!!, review!!,rate!!))
+//        }
         return inflater.inflate(R.layout.fragment_second, null, false)
     }
 
@@ -42,15 +51,7 @@ class SecondFragment : Fragment() {
         list.add(review1)
         list.add(review1)
         list.add(review1)
-        val data = arguments
-        if(data!=null){
-            val creator = data!!.getString(CREATOR)
-            val cat = data!!.getString(CAT)
-            val review = data!!.getString(REVIEW)
-            val rate = data!!.getDouble(RATING)
-            val resep = data!!.getString(RESEP)
-//            list.add(Review(cat!!,resep!!,creator!!, review!!,rate!!))
-        }
+
         rvListReview = view.findViewById<RecyclerView>(R.id.rvReview)
         rvListReview.adapter = adapter
         rvListReview.layoutManager = LinearLayoutManager(context)
